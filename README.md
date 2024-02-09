@@ -17,11 +17,17 @@ This script is designed to get the prices of the 4 crytos involved from Bitso's 
 
 ### 4cripto.ods
 
+In this sheet I introduce the records of prices with the maximum price of Btc achieved in the next 30 minutes at the right of each record (just taking into consideration the prices recorded each 5 minutes). At the right of this, I calculated the percentage gained or lost by Btc to this maximum. This data is the one which we have to rely on in order to set the adecuate x%. Based on the data so far, I have seen that x = 0.001 and x = 0.002 are reasonable takes. The percentage of instances in which the coin achieves a percentage between this ones is more or less 30% in most cases. With this in mind, the files `4criptoLabeled001.csv` and `4criptoLabeled002.csv` have the records joined with the objective (0 or 1), which label if a record achieved the respective objective (0.001% or 0.002%) in the next half and hour. These two are the training datasets.
 
+### allModels.py
 
+The job of this script is to find the best model. It tests different parametrizations for Random Forest, XGBoost, SVM and Gaussian Naive-Bayes (not different parametrizations for this one). The script tests all the models in all the parametrizations trained with 70% of the dataset. The validation is made in the whole dataset (not just in the 30% left because I don't have enough data so far to rely on that). The script finds the most accurate model and prints the parameters.
 
+### Training
 
+Depending on the model chosen in the last step, the model is trained with the full dataset in one of the scripts `modelGNB.py` (Gaussian Naive-Bayes), `modelRF.py` (Random Forest), `modelXGB.py` (XGBoost) and `modelSVM.py` (SVM). The trained model is saved in `modelo.joblib` and then it can be used in the execution pipeline.
 
+This whole modeling protocol can be done over and over taking into account the new data obtained with `Crypto.js`.
 
 
 ## Execution pipeline
