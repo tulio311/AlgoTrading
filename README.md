@@ -1,7 +1,6 @@
 # Algorithmic Trading
 
-This is an algorithmic trading system for cryptocurrency. The step of placing orders automatically is missing yet because it involves a request signing task which I have not managed to
-do correctly. Despite of this, it has all the other parts of the system already automatized. It gets the necessary information to decide if it is the correct moment to trade and process
+This is an algorithmic trading system for cryptocurrency. The step of placing and closing orders automatically is missing because the time frame for which this system was designed is very small and . Despite of this, it has all the other parts of the system already automatized. It gets the necessary information to decide if it is the correct moment to trade and process
 it with the designated model. Then it tells the user by console if it is the moment or if it is not.
 
 The model is based on a training set with the prices of 4 cryptos (Btc,Eth,Bch,Xrp) and a objective value (0 or 1). The objective is 1 if the price of Btc rose more than x% in
