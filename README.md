@@ -1,3 +1,5 @@
+Hola
+
 # Algorithmic Trading
 
 This is an algorithmic trading system for cryptocurrency. The step of placing and closing orders automatically is missing because the time frame for which this system was designed is very small and seeing the prices increments data thrown by the market, the spreads offered by the crypto exchanges don't let this system be profitable. Despite of this, it has all the other parts of the system already automatized, and its ideas can be applied in longer time frames if the data for that longer time frames is available. 
