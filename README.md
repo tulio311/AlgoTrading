@@ -1,10 +1,8 @@
-Hola
-
 # Algorithmic Trading
 
 This is an algorithmic trading system for cryptocurrency. The step of placing and closing orders automatically is missing because the time frame for which this system was designed is very small and seeing the prices increments data thrown by the market, the spreads offered by the crypto exchanges don't let this system be profitable. Despite of this, it has all the other parts of the system already automatized, and its ideas can be applied in longer time frames if the data for that longer time frames is available. 
 
-The model is based on a training set with the prices of 4 cryptos (Btc,Eth,Bch,Xrp) and a objective value (0 or 1). The objective is 1 if the price of Btc rose more than x% in
+The model is based on a training dataset with the prices of 4 cryptos (Btc,Eth,Bch,Xrp) and a objective value (0 or 1). The objective is 1 if the price of Btc rose more than x% in
 the next half hour from the registering of the 4 prices and is 0 if not (x being a percentage parameter than can be modified depending of observations). This data set for training may not be optimal but the purpose of this experiment is also to measure the extent in which the prices of some cryptos can influence the price of Bitcoin (The algorithm is now focused in Btc but it can focus in any of the other 3 cryptos in the model).
 
 The model can be thought as 2 separated pipelines. The modeling pipeline or protocol and the execution pipeline. The former consists of gathering data, organizing it, labeling it with the objective variable and using it to compare models with the purpose of finding the best one (or at least the one which seems like the best with the gathered data). The execution pipeline consists of the chain of processes needed to find the correct moment to buy using the designated model trained with the gathered data in the modeling protocol. 
