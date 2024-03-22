@@ -1,2 +1,2 @@
 arbolesFOpt,critOpt
-60,entropy
+80,log_loss

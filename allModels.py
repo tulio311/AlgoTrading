@@ -33,28 +33,16 @@ fullData = X.iloc[:,:4]
 fullLabels = X.iloc[:,4]
 
 folds = 4
-
 kFolds = KFold(n_splits=folds,  random_state=100, shuffle=True)
 
-trainX,testX, trainY,testY = train_test_split(fullData,fullLabels,test_size=.3)
+n = len(fullData)
 
-data = trainX
-Labels = trainY
-
-valid = X.iloc[:,:4]
-validLabels = X.iloc[:,4]
-
-
-n = len(validLabels)
-
-max = 0
+maxAc = 0
 avg = 0
 
 # Naive Bayes Gaussiano
 
 for i, (train_index, test_index) in enumerate(kFolds.split(fullData)):
-
-    print((train_index, test_index))
 
     modelGNB = GaussianNB()
 
@@ -64,20 +52,17 @@ for i, (train_index, test_index) in enumerate(kFolds.split(fullData)):
 
     suma = 0
 
-    print(Y)
     valid = fullLabels.iloc[test_index].reset_index().iloc[:,1]
-    print(valid)
 
     for j in range(len(Y)):
-        #print(fullLabels.iloc[test_index].iloc[j])
         if Y[j] == valid.iloc[j]:
             suma = suma + 1/len(Y)
 
     avg = avg + suma/folds
     print(suma)
     
-max = avg
-print("Naive Bayes, Accuracy: ",max)
+maxAc = avg
+print("Naive Bayes, Accuracy: ",maxAc)
 
 
 
@@ -101,6 +86,7 @@ for arb in arboles:
         for prof in profs:
             for gamma in gammas:
                 
+                # This variable will save the average accuracy of all the folds combinations
                 avg = 0
                 print("arboles: ",arb,"eta: ",eta,"profundidad: ",prof,"gamma: ",gamma)
 
@@ -111,24 +97,27 @@ for arb in arboles:
                     model.fit(fullData.iloc[train_index],fullLabels[train_index])
                 
                     Y = model.predict(fullData.iloc[test_index])
+
+                    # This variable will save the accuracy for this fold
                     suma = 0
+
+                    # reseting index of the validation fold
                     valid = fullLabels.iloc[test_index].reset_index().iloc[:,1]
 
                     for j in range(len(Y)):
                         if Y[j] == valid.iloc[j]:
                             suma = suma + 1/len(Y)
 
-                    print(suma)
                     avg = avg + suma/folds
 
 
-                if avg > max:
+                if avg > maxAc:
                     ind = 1
                     arbOpt = arb
                     etaOpt = eta
                     profOpt = prof
                     gammaOpt = gamma
-                    max = avg
+                    maxAc = avg
                 print("Accuracy ",avg)
 
 
@@ -159,12 +148,11 @@ for arb in arbolesF:
             for j in range(len(Y)):
                 if Y[j] == valid.iloc[j]:
                     suma = suma + 1/len(Y)
-            print(suma)
             avg = avg + suma/folds
 
-        if avg > max:
+        if avg > maxAc:
             ind = 2 
-            max = avg
+            maxAc = avg
             arbFOpt = arb
             critOpt = crit
         print("Accuracy: ",avg)
@@ -197,12 +185,11 @@ for C in Cs:
             for j in range(len(Y)):
                 if Y[j] == valid.iloc[j]:
                     suma = suma + 1/len(Y)
-            print(suma)
             avg = avg + suma/folds
 
-        if avg > max:
+        if avg > maxAc:
             ind = 3 
-            max = avg
+            maxAc = avg
             COpt = C
             kernelOpt = kernel
            
@@ -220,7 +207,7 @@ for C in Cs:
 if ind == 1:
     print("xgboost")
     print("arbolesOpt: ",arbOpt,"etaOpt: ",etaOpt,"profOpt: ",profOpt,"gammaOpt: ",gammaOpt)
-    print("Accuracy: ",max)
+    print("Accuracy: ",maxAc)
     par = {'arbOpt':[arbOpt],'etaOpt':[etaOpt],'profOpt':[profOpt],'gammaOpt':[gammaOpt]}
     pd.DataFrame(par).to_csv("parametros.csv",index=False)
     os.system("cmd /c python modelXGB.py "+str(arbOpt)+" "+str(etaOpt)+" "+str(profOpt)+" "+str(gammaOpt))
@@ -228,7 +215,7 @@ if ind == 1:
 elif ind == 2:
     print("Random Forest")
     print("arbolesFOpt: ",arbFOpt,"critOpt: ",critOpt)
-    print("Accuracy: ",max)
+    print("Accuracy: ",maxAc)
     par = {"arbolesFOpt":[arbFOpt],"critOpt":[critOpt]}
     pd.DataFrame(par).to_csv("parametros.csv",index=False)
     os.system(f"cmd /c python modelRF.py {arbFOpt} {critOpt}")
@@ -236,13 +223,13 @@ elif ind == 2:
 elif ind == 3:
     print("SVC")
     print("C: ",COpt,"kernel: ",kernelOpt)
-    print("Accuracy: ",max)
+    print("Accuracy: ",maxAc)
     par = {"C":[COpt],"kernel":[kernelOpt]}
     pd.DataFrame(par).to_csv("parametros.csv",index=False)
     os.system(f"cmd /c python modelSVC.py {COpt} {kernelOpt}")
 
 else:    
     print("Naive Bayes")
-    print("Accuracy: ",max)
+    print("Accuracy: ",maxAc)
     os.system("cmd /c python modelGNB.py")
 
