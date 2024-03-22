@@ -36,7 +36,7 @@ In the CSV storage version, the files `4criptoLabeled001.csv` and `4criptoLabele
 
 ### allModels.py
 
-The purpose of this script is to identify the best model. It tests various parameterizations for Random Forest, XGBoost, SVM, and Gaussian Naive-Bayes (although no different parameterizations are tested for the latter). The script evaluates all models with all parameterizations trained on 70% of the dataset (this dataset is obtained from the `training` table). Validation is performed on the entire dataset, rather than just the remaining 30%, due to insufficient data to rely solely on the latter.
+The purpose of this script is to identify the best model. It tests various parameterizations for Random Forest, XGBoost, SVM, and Gaussian Naive-Bayes (although no different parameterizations are tested for the latter). The accuracy is measured using 4-fold cross validation using the dataset obtained from the `training` table.
 
 When the script identifies the most accurate model, it executes the corresponding Python script, which will train and save the model.
 
