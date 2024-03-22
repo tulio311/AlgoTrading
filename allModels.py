@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import joblib
 from xgboost import XGBClassifier
+from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
@@ -28,10 +29,12 @@ X = pd.DataFrame(x1,columns=['btc','eth','bch','xrp','labels'])
 
 #----------------------------------------------------------
 
-rawData = X.iloc[:,:4]
-rawLabels = X.iloc[:,4]
+fullData = X.iloc[:,:4]
+fullLabels = X.iloc[:,4]
 
-trainX,testX, trainY,testY = train_test_split(rawData,rawLabels,test_size=.3)
+kFolds = KFold(n_splits=4,  random_state=100, shuffle=True)
+
+trainX,testX, trainY,testY = train_test_split(fullData,fullLabels,test_size=.3)
 
 data = trainX
 Labels = trainY
@@ -42,19 +45,23 @@ validLabels = X.iloc[:,4]
 
 n = len(validLabels)
 
+max = 0
+
 # Naive Bayes Gaussiano
 
-modelGNB = GaussianNB()
+for i, (train_index, test_index) in enumerate(kFolds.split(fullData)):
 
-modelGNB.fit(data,Labels)
+    modelGNB = GaussianNB()
 
-Y = modelGNB.predict(valid)
+    modelGNB.fit(data,Labels)
 
-suma = 0
+    Y = modelGNB.predict(valid)
 
-for i in range(n):
-    if Y[i] == validLabels[i]:
-        suma = suma + 1/n
+    suma = 0
+
+    for i in range(n):
+        if Y[i] == validLabels[i]:
+            suma = suma + 1/n
     
 max = suma
 print("Naive Bayes, Correcto: ",max)
@@ -67,7 +74,7 @@ arbOpt = 0
 etaOpt = 0
 profOpt = 0
 gammaOpt = 0
-max = 0
+
 
 arboles = [4,6,8,9,10]
 etas = [0.05,0.08,1,1.2,1.5]
